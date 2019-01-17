@@ -22,6 +22,7 @@ var budgetController = (function() {
     }
   };
 
+  // Public methods
   return {
     addItem: function(type, des, val) {
       var newItem, ID;
@@ -58,6 +59,8 @@ var UIController = (function() {
     incomeContainer: '.income__list',
     expenseContainer: '.expenses__list'
   };
+
+  // Public methods
   return {
     getInput: function() {
       return {
@@ -73,7 +76,7 @@ var UIController = (function() {
         element = DOMstrings.incomeContainer;
 
         html = '<div class="item clearfix" id="income-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div>';
-      } else if(type === 'exp'){
+      } else if (type === 'exp') {
         element = DOMstrings.expenseContainer;
 
         html = '<div class="item clearfix" id="expense-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
@@ -83,9 +86,25 @@ var UIController = (function() {
       newHtml = html.replace('%id%', obj.id);
       newHtml = newHtml.replace('%description%', obj.description);
       newHtml = newHtml.replace('%value%', obj.value);
-      
+
       // Insert HTML into the DOM
       document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
+    },
+
+    clearFields: function() {
+      var fields, fieldsArr;
+      // List of fields
+      fields = document.querySelectorAll(DOMstrings.inputDescription + ',' + DOMstrings.inputValue);
+
+      // Slice list element to array using slice and call to trick js
+      fieldsArr = Array.prototype.slice.call(fields);
+
+      fieldsArr.forEach(function(current, index, array) {
+        current.value = "";
+      });
+
+      // Create focus on 1-st element(inputDescription)
+      fieldsArr[0].focus();
     },
     getDOMstrings: function() {
       return DOMstrings;
@@ -110,20 +129,23 @@ var controller = (function(budgetCtrl, UIctrl) {
 
   var ctrlAddItem = function() {
     var input, newItem;
-    // TODO: 1. Get the field input data
+    //  1. Get the field input data
     input = UIctrl.getInput();
 
-    // TODO: 2. Add the item to the budget controller
+    // 2. Add the item to the budget controller
     newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
-    // TODO: 3. Add the item to the UI
+    // 3. Add the item to the UI
     UIctrl.addListItem(newItem, input.type);
 
+    // 4. Clear the fields
+    UIctrl.clearFields();
     // TODO: 4. Calculate budget
 
-    //// TODO: 5. display the budget on the UI
+    //// TODO: 5. Display the budget on the UI
   };
 
+  // Public methods
   return {
     init: function() {
       console.log('Application has started.');
