@@ -101,7 +101,8 @@ var UIController = (function() {
     budgetLabel: '.budget__value',
     incomeLabel: '.budget__income--value',
     expenseLabel: '.budget__expenses--value',
-    percentageLabel: '.budget__expenses--percentage'
+    percentageLabel: '.budget__expenses--percentage',
+    container: '.container'
   };
 
   // Public methods
@@ -119,11 +120,11 @@ var UIController = (function() {
       if (type === 'inc') {
         element = DOMstrings.incomeContainer;
 
-        html = '<div class="item clearfix" id="income-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div>';
+        html = '<div class="item clearfix" id="inc-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div>';
       } else if (type === 'exp') {
         element = DOMstrings.expenseContainer;
 
-        html = '<div class="item clearfix" id="expense-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+        html = '<div class="item clearfix" id="exp-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
       }
 
       // Replace the placeholder with some actual data
@@ -173,6 +174,7 @@ var UIController = (function() {
 var controller = (function(budgetCtrl, UIctrl) {
 
   var setUpEventListeners = function() {
+    // Get dom string from UI container
     var DOM = UIctrl.getDOMstrings();
 
     document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
@@ -182,6 +184,8 @@ var controller = (function(budgetCtrl, UIctrl) {
         ctrlAddItem();
       }
     });
+
+    document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
   };
 
   var updateBudget = function() {
@@ -214,6 +218,15 @@ var controller = (function(budgetCtrl, UIctrl) {
       // 5. Calculate and update budget
       updateBudget();
 
+    }
+  };
+
+  var ctrlDeleteItem = function(event) {
+    var itemId, splitID;
+    itemId = event.target.parentNode.parentNode.parentNode.parentNode.id; // Hard coded dom string
+
+    if(itemId){
+      splitID = itemId.split('-');
     }
   };
 
